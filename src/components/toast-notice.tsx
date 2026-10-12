@@ -9,13 +9,13 @@ export function ToastNotice({
   message?: string | null;
   variant: "success" | "error";
 }) {
-  const [visible, setVisible] = useState(Boolean(message));
+  const [dismissedMessage, setDismissedMessage] = useState<string | null>(null);
+  const visible = Boolean(message) && dismissedMessage !== message;
 
   useEffect(() => {
-    setVisible(Boolean(message));
     if (!message) return;
 
-    const timeout = window.setTimeout(() => setVisible(false), variant === "error" ? 8000 : 5000);
+    const timeout = window.setTimeout(() => setDismissedMessage(message), variant === "error" ? 8000 : 5000);
     return () => window.clearTimeout(timeout);
   }, [message, variant]);
 
@@ -30,7 +30,7 @@ export function ToastNotice({
       <button
         aria-label="Dismiss notification"
         className="toast-dismiss"
-        onClick={() => setVisible(false)}
+        onClick={() => setDismissedMessage(message ?? null)}
         type="button"
       >
         ×
