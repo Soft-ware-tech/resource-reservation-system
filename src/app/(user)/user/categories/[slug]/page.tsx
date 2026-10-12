@@ -86,8 +86,10 @@ export default async function BrowseCategoryPage({ params }: PageProps) {
                 {!status.isInUse && status.until && (
                   <p className="next-booking-hint">Next reserved until {formatColomboDateTime(status.until)}</p>
                 )}
-                <details className="booking-disclosure">
-                  <summary className="gradient-button booking-trigger">Reserve this resource <span aria-hidden="true">↗</span></summary>
+                <details className="booking-disclosure" suppressHydrationWarning>
+                  <summary className="gradient-button booking-trigger">
+                    Reserve this resource <span aria-hidden="true">↗</span>
+                  </summary>
                   <div className="booking-form-panel glass-card">
                     <BookingForm
                       defaultEndAt={defaultBookingTimes.endAt}

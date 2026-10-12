@@ -977,16 +977,10 @@ input:focus-visible {
 }
 
 .booking-form-panel {
-  position: absolute;
-  z-index: 4;
-  top: calc(100% + 8px);
-  right: 0;
-  width: min(380px, calc(100vw - 46px));
-  max-height: min(70vh, 660px);
-  overflow: auto;
+  width: 100%;
+  margin-top: 10px;
   padding: 17px;
   background: var(--surface-strong);
-  box-shadow: var(--shadow);
 }
 
 .booking-form {

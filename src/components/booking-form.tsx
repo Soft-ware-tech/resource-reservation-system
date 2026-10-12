@@ -34,7 +34,7 @@ export function BookingForm({
       {state.error && <p className="form-error booking-feedback" role="alert">{state.error}</p>}
       {state.success && <p className="form-success booking-feedback" role="status">{state.success}</p>}
       <button className="gradient-button form-submit" disabled={isPending} type="submit">
-        {isPending ? "Checking availability…" : "Reserve this resource"}
+        {isPending ? "Checking availability…" : "Confirm booking"}
       </button>
     </form>
   );
