@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { colomboTimeToUtc } from "./time";
+import { colomboTimeToUtc, getColomboDayRange } from "./time";
 import { findNextAvailableStart, overlaps } from "./logic";
 
 const instant = (hour: number, minute = 0) => new Date(Date.UTC(2026, 0, 1, hour, minute));
@@ -46,4 +46,11 @@ test("keeps the requested start when an entire duration fits before a booking", 
 
 test("converts Colombo wall time to a UTC instant", () => {
   assert.equal(colomboTimeToUtc("2026-01-01T09:00").toISOString(), "2026-01-01T03:30:00.000Z");
+});
+
+test("maps one Colombo calendar day to its UTC boundaries", () => {
+  const { startAt, endAt } = getColomboDayRange(new Date("2026-10-12T12:00:00.000Z"));
+
+  assert.equal(startAt.toISOString(), "2026-10-11T18:30:00.000Z");
+  assert.equal(endAt.toISOString(), "2026-10-12T18:30:00.000Z");
 });

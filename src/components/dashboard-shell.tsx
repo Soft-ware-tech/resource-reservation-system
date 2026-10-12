@@ -29,21 +29,26 @@ export function DashboardShell({ name, role, children }: DashboardShellProps) {
             <span>PRIMEWAVE <span className="brand-light">LAB</span></span>
           </Link>
 
-          <nav className={`nav-pill ${menuOpen ? "nav-open" : ""}`} aria-label="Main navigation">
-            <Link className="nav-link" href={dashboardPath} onClick={() => setMenuOpen(false)}>
-              Overview
-            </Link>
+          <nav className={`nav-pill ${role === "ADMIN" ? "admin-nav" : ""} ${menuOpen ? "nav-open" : ""}`} aria-label="Main navigation">
             {role === "ADMIN" ? (
-              <>
-                <Link className="nav-link" href="/admin/categories" onClick={() => setMenuOpen(false)}>
-                  Categories
+              [
+                ["Overview", "/admin"],
+                ["Bookings", "/admin/bookings"],
+                ["Available", "/admin/available"],
+                ["In use", "/admin/in-use"],
+                ["Users", "/admin/users"],
+                ["Categories", "/admin/categories"],
+                ["Resources", "/admin/resources"],
+              ].map(([label, href]) => (
+                <Link className="nav-link" href={href} key={href} onClick={() => setMenuOpen(false)}>
+                  {label}
                 </Link>
-                <Link className="nav-link" href="/admin/resources" onClick={() => setMenuOpen(false)}>
-                  Resources
-                </Link>
-              </>
+              ))
             ) : (
               <>
+                <Link className="nav-link" href="/user" onClick={() => setMenuOpen(false)}>
+                  Overview
+                </Link>
                 <Link className="nav-link" href="/user" onClick={() => setMenuOpen(false)}>
                   Browse resources
                 </Link>

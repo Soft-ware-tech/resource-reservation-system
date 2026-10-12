@@ -130,6 +130,9 @@ export async function createBooking(
   revalidatePath("/user/bookings");
   revalidatePath("/user/categories/[slug]", "page");
   revalidatePath("/admin");
+  revalidatePath("/admin/bookings");
+  revalidatePath("/admin/available");
+  revalidatePath("/admin/in-use");
   return { success: "Resource reserved. You can find it in My Bookings." };
 }
 
@@ -154,6 +157,9 @@ export async function cancelBooking(formData: FormData) {
   revalidatePath("/user");
   revalidatePath("/user/bookings");
   revalidatePath("/user/categories/[slug]", "page");
+  revalidatePath("/admin/bookings");
+  revalidatePath("/admin/available");
+  revalidatePath("/admin/in-use");
   redirect("/user/bookings?success=cancelled");
 }
 
@@ -178,6 +184,8 @@ export async function markBookingInUse(formData: FormData) {
   if (result.count === 0) redirect("/user/bookings?error=start");
 
   revalidatePath("/user/bookings");
+  revalidatePath("/admin/bookings");
+  revalidatePath("/admin/in-use");
   redirect("/user/bookings?success=started");
 }
 
@@ -205,5 +213,8 @@ export async function returnBooking(formData: FormData) {
   revalidatePath("/user/bookings");
   revalidatePath("/user/categories/[slug]", "page");
   revalidatePath("/admin");
+  revalidatePath("/admin/bookings");
+  revalidatePath("/admin/available");
+  revalidatePath("/admin/in-use");
   redirect("/user/bookings?success=returned");
 }

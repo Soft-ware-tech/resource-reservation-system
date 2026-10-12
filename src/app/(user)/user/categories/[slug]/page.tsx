@@ -5,7 +5,7 @@ import { formatInTimeZone } from "date-fns-tz";
 import { notFound } from "next/navigation";
 import { CategoryResourceViews } from "@/components/category-resource-views";
 import { BOOKING_TIME_ZONE, getDefaultColomboBookingTimes } from "@/lib/bookings/time";
-import { getResourceAvailability } from "@/lib/resources/availability";
+import { getResourcesAvailability } from "@/lib/resources/availability";
 import { prisma } from "@/lib/db";
 
 type PageProps = { params: Promise<{ slug: string }> };
@@ -27,12 +27,11 @@ export default async function BrowseCategoryPage({ params }: PageProps) {
   if (!category) notFound();
 
   const now = new Date();
-  const availability = await Promise.all(
-    category.resources.map(async (resource) => ({
-      resource,
-      status: await getResourceAvailability(resource.id),
-    })),
-  );
+  const resourceAvailability = await getResourcesAvailability(category.resources.map(({ id }) => id), now);
+  const availability = category.resources.map((resource) => ({
+    resource,
+    status: resourceAvailability.get(resource.id) ?? { isInUse: false, until: null, nextBooking: null },
+  }));
   const availableNow = availability.filter(({ status }) => !status.isInUse).length;
   const defaultBookingTimes = getDefaultColomboBookingTimes();
   const bookings = category.resources.length
