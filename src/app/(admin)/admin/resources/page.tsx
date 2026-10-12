@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ResourceForm } from "@/components/resource-forms";
 import { ResourceDeleteForm } from "@/components/resource-delete-form";
+import { ToastNotice } from "@/components/toast-notice";
 import { prisma } from "@/lib/db";
 
 export const metadata: Metadata = { title: "Manage resources | PrimeWave Reserve" };
@@ -40,11 +41,7 @@ export default async function ManageResourcesPage({ searchParams }: PageProps) {
         <span className="count-pill">{resources.length} resources</span>
       </div>
 
-      {notice && (
-        <p className={query.error ? "form-error page-notice" : "form-success page-notice"} role="status">
-          {notice}
-        </p>
-      )}
+      <ToastNotice message={notice} variant={query.error ? "error" : "success"} />
 
       {categories.length === 0 ? (
         <div className="glass-card empty-card">

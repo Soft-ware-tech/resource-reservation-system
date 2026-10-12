@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { BookingStatus, Prisma } from "@prisma/client";
 import { BookingActionForm } from "@/components/booking-actions";
+import { ToastNotice } from "@/components/toast-notice";
 import { requireRole } from "@/lib/auth/server";
 import { formatColomboDateTime } from "@/lib/resources/availability";
 import { prisma } from "@/lib/db";
@@ -67,11 +68,7 @@ export default async function MyBookingsPage({ searchParams }: PageProps) {
         </div>
         <span className="count-pill">{bookings.length} total</span>
       </div>
-      {notice && (
-        <p className={query.error ? "form-error page-notice" : "form-success page-notice"} role="status">
-          {notice}
-        </p>
-      )}
+      <ToastNotice message={notice} variant={query.error ? "error" : "success"} />
       <BookingGroup title="In progress" subtitle="Resources you can return early" bookings={active} now={now} kind="active" />
       <BookingGroup title="Coming up" subtitle="Upcoming reservations you can cancel" bookings={upcoming} now={now} kind="upcoming" />
       <BookingGroup title="History" subtitle="Past and cancelled reservations" bookings={history} now={now} kind="history" />

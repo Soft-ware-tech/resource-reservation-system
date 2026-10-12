@@ -3,6 +3,7 @@ import { BookingStatus } from "@prisma/client";
 import { isValid, parseISO } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
 import { AdminBookingAction } from "@/components/admin-actions";
+import { ToastNotice } from "@/components/toast-notice";
 import { getColomboDayRange } from "@/lib/bookings/time";
 import { requireRole } from "@/lib/auth/server";
 import { formatColomboDateTime } from "@/lib/resources/availability";
@@ -116,7 +117,7 @@ export default async function AdminBookingsPage({ searchParams }: PageProps) {
         </div>
         <span className="count-pill">{totalCount} matches</span>
       </div>
-      {notice && <p className={query.error ? "form-error page-notice" : "form-success page-notice"} role="status">{notice}</p>}
+      <ToastNotice message={notice} variant={query.error ? "error" : "success"} />
 
       <div className="admin-booking-summary">
         <article className="glass-card admin-summary-card">

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { AdminBookingAction } from "@/components/admin-actions";
+import { ToastNotice } from "@/components/toast-notice";
 import { requireRole } from "@/lib/auth/server";
 import { prisma } from "@/lib/db";
 import { formatColomboDateTime, getResourcesAvailability } from "@/lib/resources/availability";
@@ -44,7 +45,7 @@ export default async function CurrentlyInUsePage({ searchParams }: PageProps) {
         </div>
         <span className="count-pill">{inUse.length} in use</span>
       </div>
-      {notice && <p className={query.error ? "form-error page-notice" : "form-success page-notice"} role="status">{notice}</p>}
+      <ToastNotice message={notice} variant={query.error ? "error" : "success"} />
       {inUse.length ? (
         <div className="booking-list">
           {inUse.map(({ resource, booking }) => (

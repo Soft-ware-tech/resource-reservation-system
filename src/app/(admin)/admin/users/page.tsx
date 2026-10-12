@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { createManagedUser } from "@/app/actions/admin";
 import { UserActiveToggle } from "@/components/admin-actions";
+import { ToastNotice } from "@/components/toast-notice";
 import { requireRole } from "@/lib/auth/server";
 import { prisma } from "@/lib/db";
 
@@ -54,7 +55,7 @@ export default async function ManageUsersPage({ searchParams }: PageProps) {
         </div>
         <span className="count-pill">{users.length} users</span>
       </div>
-      {notice && <p className={query.error ? "form-error page-notice" : "form-success page-notice"} role="status">{notice}</p>}
+      <ToastNotice message={notice} variant={query.error ? "error" : "success"} />
       {users.length ? (
         <div className="management-grid admin-users-layout">
           <section className="glass-card management-panel">

@@ -1,6 +1,32 @@
 "use client";
 
 import { adminCancelBooking, adminReturnBooking, setUserActive } from "@/app/actions/admin";
+import { useFormStatus } from "react-dom";
+
+function AdminBookingSubmitButton({ action }: { action: "cancel" | "return" }) {
+  const { pending } = useFormStatus();
+  const label = action === "cancel" ? "Cancel booking" : "Mark returned";
+  const pendingLabel = action === "cancel" ? "Cancelling…" : "Marking returned…";
+
+  return (
+    <button className={`outline-pill booking-action${action === "cancel" ? " cancel-action" : ""}`} disabled={pending} type="submit">
+      {pending ? pendingLabel : label}
+    </button>
+  );
+}
+
+function UserActiveSubmitButton({ active }: { active: boolean }) {
+  const { pending } = useFormStatus();
+  return (
+    <button
+      className={`outline-pill booking-action${active ? " cancel-action" : ""}`}
+      disabled={pending}
+      type="submit"
+    >
+      {pending ? (active ? "Deactivating…" : "Activating…") : active ? "Deactivate" : "Activate"}
+    </button>
+  );
+}
 
 export function AdminBookingAction({
   bookingId,
@@ -13,8 +39,6 @@ export function AdminBookingAction({
 }) {
   const isCancel = action === "cancel";
   const formAction = isCancel ? adminCancelBooking : adminReturnBooking;
-  const label = isCancel ? "Cancel booking" : "Mark returned";
-
   return (
     <form
       action={formAction}
@@ -26,9 +50,7 @@ export function AdminBookingAction({
       }}
     >
       <input name="bookingId" type="hidden" value={bookingId} />
-      <button className={`outline-pill booking-action${isCancel ? " cancel-action" : ""}`} type="submit">
-        {label}
-      </button>
+      <AdminBookingSubmitButton action={action} />
     </form>
   );
 }
@@ -47,12 +69,7 @@ export function UserActiveToggle({ userId, active }: { userId: string; active: b
     >
       <input name="userId" type="hidden" value={userId} />
       <input name="active" type="hidden" value={String(nextActive)} />
-      <button
-        className={`outline-pill booking-action${active ? " cancel-action" : ""}`}
-        type="submit"
-      >
-        {active ? "Deactivate" : "Activate"}
-      </button>
+      <UserActiveSubmitButton active={active} />
     </form>
   );
 }

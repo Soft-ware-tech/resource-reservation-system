@@ -2,13 +2,13 @@
 
 import { useActionState } from "react";
 import { deleteCategory, saveCategory, saveResource, type ResourceActionState } from "@/app/actions/resources";
+import { ToastNotice } from "@/components/toast-notice";
 
 const initialState: ResourceActionState = {};
 
 function Feedback({ state }: { state: ResourceActionState }) {
-  if (state.error) return <p className="form-error" role="alert">{state.error}</p>;
-  if (state.success) return <p className="form-success" role="status">{state.success}</p>;
-  return null;
+  const message = state.error ?? state.success;
+  return <ToastNotice message={message} variant={state.error ? "error" : "success"} />;
 }
 
 export function CategoryForm({
@@ -51,8 +51,7 @@ export function CategoryDeleteForm({ id, name }: { id: string; name: string }) {
       <button className="text-button danger-text" disabled={isPending} type="submit">
         {isPending ? "Deleting…" : "Delete"}
       </button>
-      {state.error && <p className="form-error compact-error" role="alert">{state.error}</p>}
-      {state.success && <p className="form-success compact-error" role="status">{state.success}</p>}
+      <ToastNotice message={state.error ?? state.success} variant={state.error ? "error" : "success"} />
     </form>
   );
 }

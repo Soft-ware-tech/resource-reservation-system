@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { createBooking, type BookingActionState } from "@/app/actions/bookings";
+import { ToastNotice } from "@/components/toast-notice";
 
 const initialState: BookingActionState = {};
 
@@ -32,7 +33,7 @@ export function BookingForm({
         <input maxLength={500} name="purpose" placeholder="What are you using it for?" />
       </label>
       {state.error && <p className="form-error booking-feedback" role="alert">{state.error}</p>}
-      {state.success && <p className="form-success booking-feedback" role="status">{state.success}</p>}
+      <ToastNotice message={state.success} variant="success" />
       <button className="gradient-button form-submit" disabled={isPending} type="submit">
         {isPending ? "Checking availability…" : "Confirm booking"}
       </button>
