@@ -30,11 +30,23 @@ export function DashboardShell({ name, role, children }: DashboardShellProps) {
           </Link>
 
           <nav className={`nav-pill ${menuOpen ? "nav-open" : ""}`} aria-label="Main navigation">
-            <Link className="nav-link active" href={dashboardPath} onClick={() => setMenuOpen(false)}>
+            <Link className="nav-link" href={dashboardPath} onClick={() => setMenuOpen(false)}>
               Overview
             </Link>
-            <span className="nav-link nav-coming-soon">Reservations</span>
-            <span className="nav-link nav-coming-soon">Resources</span>
+            {role === "ADMIN" ? (
+              <>
+                <Link className="nav-link" href="/admin/categories" onClick={() => setMenuOpen(false)}>
+                  Categories
+                </Link>
+                <Link className="nav-link" href="/admin/resources" onClick={() => setMenuOpen(false)}>
+                  Resources
+                </Link>
+              </>
+            ) : (
+              <Link className="nav-link" href="/user" onClick={() => setMenuOpen(false)}>
+                Browse resources
+              </Link>
+            )}
           </nav>
 
           <div className="header-actions">
