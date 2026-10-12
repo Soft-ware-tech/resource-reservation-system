@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum BookingStatus {
+  BOOKED
+  IN_USE
+  COMPLETED
+  CANCELLED
+}
+
+model User {
+  id           String    @id @default(uuid()) @db.Uuid
+  name         String
+  email        String    @unique
+  passwordHash String
+  role         Role      @default(USER)
+  active       Boolean   @default(true)
+  bookings     Booking[]
+  createdAt    DateTime  @default(now()) @db.Timestamptz(3)
+  updatedAt    DateTime  @updatedAt @db.Timestamptz(3)
+}
+
+model Category {
+  id          String     @id @default(uuid()) @db.Uuid
+  name        String     @unique
+  slug        String     @unique
+  description String?
+  resources   Resource[]
+  createdAt   DateTime   @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime   @updatedAt @db.Timestamptz(3)
+}
+
+model Resource {
+  id          String    @id @default(uuid()) @db.Uuid
+  name        String
+  categoryId  String    @db.Uuid
+  category    Category  @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  description String?
+  details     String?
+  imageUrl    String?
+  active      Boolean   @default(true)
+  bookings    Booking[]
+  createdAt   DateTime  @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime  @updatedAt @db.Timestamptz(3)
+
+  @@unique([categoryId, name])
+  @@index([categoryId, active])
+}
+
+model Booking {
+  id         String        @id @default(uuid()) @db.Uuid
+  userId     String        @db.Uuid
+  user       User          @relation(fields: [userId], references: [id], onDelete: Restrict)
+  resourceId String        @db.Uuid
+  resource   Resource      @relation(fields: [resourceId], references: [id], onDelete: Restrict)
+  startAt    DateTime      @db.Timestamptz(3)
+  endAt      DateTime      @db.Timestamptz(3)
+  purpose    String?
+  status     BookingStatus @default(BOOKED)
+  createdAt  DateTime      @default(now()) @db.Timestamptz(3)
+  updatedAt  DateTime      @updatedAt @db.Timestamptz(3)
+
+  @@index([resourceId, startAt, endAt])
+  @@index([userId, startAt])
+  @@index([status, startAt])
+}
