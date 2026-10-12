@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { BookingForm } from "@/components/booking-form";
+import { getDefaultColomboBookingTimes } from "@/lib/bookings/time";
 import { formatColomboDateTime, getResourceAvailability } from "@/lib/resources/availability";
 import { prisma } from "@/lib/db";
 
@@ -30,6 +32,7 @@ export default async function BrowseCategoryPage({ params }: PageProps) {
     })),
   );
   const availableNow = availability.filter(({ status }) => !status.isInUse).length;
+  const defaultBookingTimes = getDefaultColomboBookingTimes();
 
   return (
     <section className="management-section">
@@ -83,7 +86,16 @@ export default async function BrowseCategoryPage({ params }: PageProps) {
                 {!status.isInUse && status.until && (
                   <p className="next-booking-hint">Next reserved until {formatColomboDateTime(status.until)}</p>
                 )}
-                <p className="resource-phase-hint">Online reservations are coming soon.</p>
+                <details className="booking-disclosure">
+                  <summary className="gradient-button booking-trigger">Reserve this resource <span aria-hidden="true">↗</span></summary>
+                  <div className="booking-form-panel glass-card">
+                    <BookingForm
+                      defaultEndAt={defaultBookingTimes.endAt}
+                      defaultStartAt={defaultBookingTimes.startAt}
+                      resourceId={resource.id}
+                    />
+                  </div>
+                </details>
               </div>
             </article>
           ))}

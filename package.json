@@ -8,11 +8,14 @@
     "start": "next start",
     "lint": "eslint",
     "db:migrate": "prisma migrate dev",
-    "db:seed": "prisma db seed"
+    "db:seed": "prisma db seed",
+    "test": "tsx --test src/lib/bookings/logic.test.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",
     "bcryptjs": "^3.0.2",
+    "date-fns": "^4.4.0",
+    "date-fns-tz": "^3.2.0",
     "jose": "^6.2.12",
     "next": "16.4.0",
     "react": "19.3.0",

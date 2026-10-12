@@ -43,9 +43,14 @@ export function DashboardShell({ name, role, children }: DashboardShellProps) {
                 </Link>
               </>
             ) : (
-              <Link className="nav-link" href="/user" onClick={() => setMenuOpen(false)}>
-                Browse resources
-              </Link>
+              <>
+                <Link className="nav-link" href="/user" onClick={() => setMenuOpen(false)}>
+                  Browse resources
+                </Link>
+                <Link className="nav-link" href="/user/bookings" onClick={() => setMenuOpen(false)}>
+                  My Bookings
+                </Link>
+              </>
             )}
           </nav>
 

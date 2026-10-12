@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -10,12 +11,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" data-theme="dark" suppressHydrationWarning>
       <body>
-        <script
-          dangerouslySetInnerHTML={{
-            __html:
-              "try { const t = localStorage.getItem('resource-reservation-theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch {}",
-          }}
-        />
+        <Script id="theme-init" strategy="beforeInteractive">
+          {`try { const theme = localStorage.getItem("resource-reservation-theme"); if (theme === "light" || theme === "dark") document.documentElement.dataset.theme = theme; } catch {}`}
+        </Script>
         {children}
       </body>
     </html>
